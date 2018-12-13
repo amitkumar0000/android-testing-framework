@@ -1,0 +1,86 @@
+Following are some of the testing frameworks used in Android:
+================================================================
+JUnit
+Espresso
+Mockito
+Powermock
+Robolectric
+Hamcrest
+
+app/src/main/java/ —  Main java source code folder.
+app/src/test/java/ —  Local unit test folder.
+app/src/androidTest/java/ — Instrumentation test folder.
+
+Local Unit Testing cannot have Android APIs.
+The test folder classes are compiled and run on the JVM only.
+
+What is Espresso?
+-----------------
+Espresso is an instrumentation Testing framework made available by Google for the ease of UI Testing.
+
+AndroidJUnitRunner is the instrumentation runner.
+------------------------------------------------
+This is essentially the entry point into running your entire suite of tests.
+It controls the test environment, the test apk, and launches all of the tests defined in your test package
+
+
+There are 6 types of annotations that can be applied to the methods used inside the test class,
+which are @Test, @Before, @BeforeClass, @After, @AfterClass, @Rule
+
+Important things to note is that
+=================================
+The activity will be launched using the @Rule before test code begins
+
+By default the rule will be initialised and the activity will be launched(onCreate, onStart, onResume)
+before running every @Before method
+
+Activity will be Destroyed(onPause, onStop, onDestroy) after running the @After method
+which in turn is called after every @Test Method
+
+The activity’s launch can be postponed by setting the launchActivity to false in the constructor of ActivityTestRule ,
+in that case you will have to manually launch the activity before the tests
+
+1. Finding a View using a ViewMatcher.
+-------------------------------------
+Espresso uses onView (Matcher<View> viewMatcher) method to find a particular view among the View hierarchy.
+onView() method takes a Matcher as argument.
+
+Espresso.onView(withId(R.id.login_button))
+
+2.Performing actions on the View
+---------------------------------
+After finding the View you can perform actions on the View or on its Descendant using ViewActions of the Espresso.
+Some of the Most common actions are click(),clearText() etc.
+
+Espresso.onView(withId(R.id.login_button)).perform(ViewActions.click())
+
+3.Checking the ViewAssertion
+----------------------------
+After performing an action on the View we will want to see if the view behaves as we want,
+This can be done using check (ViewAssertion viewAssert)
+
+Espresso.onView(withId(R.id.login_result)).check(matches(withText(R.string.login_success)))
+
+ViewMatchers - allows to find view in the current view hierarchy
+
+ViewActions - allows to perform actions on the views
+
+ViewAssertions - allows to assert state of a view
+
+
+
+Robolectric
+=============
+Robolectric is an Android unit testing framework that allows you to run tests inside the JVM on your development workstation.
+Robolectric rewrites Android SDK classes as they’re being loaded and makes it possible for them to run on a regular JVM,
+resulting in fast test times.
+Furthermore, it handles inflation of views, resource loading, and more stuff that’s implemented in native C code on Android devices,
+making the need for emulators and physical devices to run automated tests obsolete.
+
+
+Mockito
+========
+Mockito is a mocking framework that enables us to write clean tests in java.
+It simplifies the process of creating test doubles (mocks),
+which are used to replace the original dependencies of a component/module used in production.
+A StackOverflow answer discusses about the differences between mocks and stubs in fairly simple terms that you can read to learn more.

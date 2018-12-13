@@ -1,0 +1,41 @@
+Target and challenge of unit testing
+--------------------------------------
+A unit test should test functionality in isolation.
+Side effects from other classes or the system should be eliminated for a unit test, if possible
+
+This can be done via using test replacements (test doubles) for the real dependencies.
+
+Test doubles can be classified like the following:
+-------------------------------------------------
+1. A dummy object is passed around but never used, i.e.,
+   its methods are never called. Such an object can for example be used to fill the parameter list of a method.
+2. Fake objects have working implementations, but are usually simplified.
+    For example, they use an in memory database and not a real database
+3. A stub class is an partial implementation for an interface or class
+   with the purpose of using an instance of this stub class during testing.
+   Stubs usually don’t respond to anything outside what’s programmed in for the test.
+   Stubs may also record information about calls
+4. A mock object is a dummy implementation for an interface or a class in which you define the output of certain method calls.
+   Mock objects are configured to perform a certain behavior during a test.
+   They typically record the interaction with the system and tests can validate that.
+
+
+Mockito FrameWork
+=================
+Mockito is a popular mock framework which can be used in conjunction with JUnit.
+ Mockito allows you to create and configure mock objects.
+ Using Mockito simplifies the development of tests for classes with external dependencies significantly.
+
+If you use Mockito in tests you typically:
+
+    Mock away external dependencies and insert the mocks into the code under test
+    Execute the code under test
+    Validate that the code executed correctly
+
+Using the Mockito API
+=====================
+1. Creating mock objects with Mockito
+    Mockito provides several methods to create mock objects:
+    1. Using the static mock() method.
+    Using the @Mock annotation.
+

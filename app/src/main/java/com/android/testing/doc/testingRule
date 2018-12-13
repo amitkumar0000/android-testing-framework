@@ -1,0 +1,6 @@
+InstantTaskExecutorRule
+=======================
+(you need to add Gradle dependency `android.arch.core:core-testing`)to your test,
+this rule will make sure that the writing of the value will synchronous instead of asynchronous
+
+add in gradle    androidTestImplementation "android.arch.core:core-testing:1.0.0"
