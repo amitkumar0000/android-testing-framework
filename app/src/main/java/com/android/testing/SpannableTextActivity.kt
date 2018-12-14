@@ -8,7 +8,6 @@ import android.text.SpannableStringBuilder
 import android.text.style.ForegroundColorSpan
 import android.text.style.RelativeSizeSpan
 import android.text.style.StyleSpan
-import android.view.View
 import kotlinx.android.synthetic.main.activity_spannable_text.*
 
 class SpannableTextActivity : AppCompatActivity() {

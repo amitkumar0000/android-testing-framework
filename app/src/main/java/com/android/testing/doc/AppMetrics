@@ -1,0 +1,62 @@
+App Metric
+---------
+    1.User engagement
+    2.Customer satisfaction
+    3.Acquisition
+    4.App performance
+
+1. User Engagement
+    a. how many users install and use your app
+    b. how often a user interacts with your app
+
+    Google Play Campaign Attribution -
+        See which campaigns, websites, and other apps are referring users to Google Play Store to download your app.
+    General Campaign & Traffic Source Attribution
+        See which campaigns or referrers launch your app after it is installed.
+
+    Implementing Google Play Campaign Attribution
+    ============================================
+        When your app is downloaded from Google Play Store,
+        the Play Store app broadcasts an INSTALL_REFERRER intent to your app during installation.
+        This intent contains the value of the referrer parameter of the link used to reach your app's Google Play Store page,
+        if one was present.
+
+        To attribute an app download to a campaign, you must add a referrer parameter to any links that point to Google Play Store,
+        and add a BroadcastReceiver to your app to receive and
+        set the campaign information contained in the intent on your Google Analytics tracker.
+
+        1. Add the Google Analytics receiver to your AndroidManifest.xml file.
+           To add the Google Analytics receiver to the manifest, copy and paste the following markup:
+
+           <application>
+               <!-- Used for Google Play Store Campaign Measurement-->
+               <receiver android:name="com.google.android.gms.analytics.CampaignTrackingReceiver"
+                   android:enabled="true"
+                   android:exported="true">
+                   <intent-filter>
+                       <action android:name="com.android.vending.INSTALL_REFERRER" />
+                   </intent-filter>
+               </receiver>
+               <service android:name="com.google.android.gms.analytics.CampaignTrackingService"
+                   android:enabled="true"
+                   android:exported="false" />
+           </application>
+        2. Add Google Analytics Campaign Parameters to Google Play URLs
+            Next, add a referrer parameter to any URLs that will be linking directly to Google Play Store
+            and set the value of that parameter to a string of Google Analytics campaign parameters
+            that describe the source, as in this example:
+
+            https://play.google.com/store/apps/details?id=com.example.application
+            &referrer=utm_source%3Dgoogle
+            %26utm_medium%3Dcpc
+            %26utm_term%3Drunning%252Bshoes
+            %26utm_content%3Dlogolink
+            %26utm_campaign%3Dspring_sale
+
+
+        General Campaign & Traffic Source Attribution
+        =============================================
+        After an app has been installed, it may be launched by referrals from ad campaigns, websites, or other apps.
+        In this scenario, referring traffic sources or marketing campaigns may be attributed to user activity
+        in subsequent sessions by setting the campaign parameters
+        on a tracker directly by using the setCampaignParamsFromUrl method.

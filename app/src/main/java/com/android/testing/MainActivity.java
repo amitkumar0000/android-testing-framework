@@ -36,17 +36,19 @@ public class MainActivity extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                /*boolean isValid = Utils.checkEmailForValidity(editText.getText().toString());
+                boolean isValid = Utils.checkEmailForValidity(editText.getText().toString());
 
                 if (isValid) {
                     Toast.makeText(getApplicationContext(), "Email is valid", Toast.LENGTH_LONG).show();
                 } else {
                     Toast.makeText(getApplicationContext(), "Email not valid", Toast.LENGTH_LONG).show();
-                }*/
+                }
 
-                callTopics();
             }
         });
+
+//        callTopics();
+
     }
 
     private void callTopics() {

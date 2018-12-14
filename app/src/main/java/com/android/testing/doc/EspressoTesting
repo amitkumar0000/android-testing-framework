@@ -1,0 +1,54 @@
+@RunWith(AndroidJUnit4::class)
+    Run with Android Junit Framework
+
+ActivityTestRule<className>
+    It tell to start executing from this class
+
+
+ViewMatcher : find view
+ViewAction : perform action
+ViewAssertion : assert state
+
+
+ViewMatcher
+-----------
+onView(withId())
+onView(withText())
+onView(withContentDescription())
+onView(hasLinks())
+
+onview(allOf(wihtId(),isDIsplayed()))
+onview(allOf(wihtId(),isCompletelyDIsplayed()))
+onview(allOf(wihtId(),isClickable()))
+onview(allOf(wihtId(),isChecked()))
+onview(allOf(wihtId(),hasFocus()))
+
+onview(withText((startsWith("hello"))))
+
+onData  only use with AdapterView(ListView, GridView, RecyclerView)
+
+onData(withId("listViewId")).atPosition(2).check(matches(isDisplayed)))
+
+RootMatcher
+------------
+onView(withText()).inRoot(isDialog)
+
+ViewAction
+-----------
+onView(withId()).perform(typeText())
+onView(withId()).perform(clearText())
+onView(withId()).perform(click())
+onView(withId()).perform(doubleclick())
+onView(withId()).perform(longclick())
+onView(withId()).perform(swipeUp())
+onView(withId()).perform(swipeDown())
+onView(withId()).perform(swipeLeft())
+onView(withId()).perform(swipeRight())
+onView(withId()).perform(scrollTo())
+onView(withId()).perform(scrollTo(),click())
+
+
+closeSoftKeyboard()
+pressBack()
+pressMenuKey()
+keycodepressKey()

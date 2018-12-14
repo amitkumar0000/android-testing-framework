@@ -41,11 +41,12 @@ public class MainActivityTest {
     }
 
     @Rule
-    public ActivityTestRule<MainActivity> mainActivityActivityTestRule = new ActivityTestRule<>(MainActivity.class,true,true);
+    public ActivityTestRule<MainActivity> mainActivityActivityTestRule
+            = new ActivityTestRule<>(MainActivity.class,true,true);
 
 
     @Before
-    public void setUp(){
+    public void setUp() throws Exception{
         mainActivity = mainActivityActivityTestRule.getActivity();
     }
 
