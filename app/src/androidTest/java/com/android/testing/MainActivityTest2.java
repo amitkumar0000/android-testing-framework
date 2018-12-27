@@ -1,10 +1,14 @@
 package com.android.testing;
 
 
+import android.support.test.espresso.UiController;
+import android.support.test.espresso.ViewAction;
 import android.support.test.espresso.ViewInteraction;
+import android.support.test.espresso.action.ViewActions;
 import android.support.test.filters.LargeTest;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
+import android.support.v7.widget.SearchView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
@@ -17,7 +21,12 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
+import static android.support.test.espresso.action.ViewActions.pressImeActionButton;
+import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.matcher.ViewMatchers.isAssignableFrom;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
@@ -31,44 +40,46 @@ public class MainActivityTest2 {
     public ActivityTestRule<MainActivity> mActivityTestRule = new ActivityTestRule<>(MainActivity.class);
 
     @Test
-    public void mainActivityTest2() {
-        ViewInteraction editText = onView(
-                allOf(withId(R.id.inEmail), withText("Enter your email here"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(android.R.id.content),
-                                        0),
-                                0),
-                        isDisplayed()));
-        editText.check(matches(withText("Enter your email here")));
+    public void loginSuccess() {
 
-        ViewInteraction button = onView(
-                allOf(withId(R.id.button),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(android.R.id.content),
-                                        0),
-                                1),
-                        isDisplayed()));
-        button.check(matches(isDisplayed()));
+        onView(withId(R.id.inEmail))
+                .perform(ViewActions.clearText(), closeSoftKeyboard());
+
+        onView(withId(R.id.inEmail))
+                .perform(typeText("sdsd"), closeSoftKeyboard());
+
+
+        onView(withId(R.id.button))
+                .perform(click());
+
+        onView(withId(R.id.searchView))
+                .perform(typeSearchViewText("whatever query"),pressImeActionButton());
+
+        onView(withId(R.id.callBtn)).check(matches(isDisplayed()));
+
+
+
     }
 
-    private static Matcher<View> childAtPosition(
-            final Matcher<View> parentMatcher, final int position) {
 
-        return new TypeSafeMatcher<View>() {
+    public static ViewAction typeSearchViewText(final String text){
+        return new ViewAction(){
             @Override
-            public void describeTo(Description description) {
-                description.appendText("Child at position " + position + " in parent ");
-                parentMatcher.describeTo(description);
+            public Matcher<View> getConstraints() {
+                //Ensure that only apply if it is a SearchView and if it is visible.
+                return allOf(isDisplayed(), isAssignableFrom(SearchView.class));
             }
 
             @Override
-            public boolean matchesSafely(View view) {
-                ViewParent parent = view.getParent();
-                return parent instanceof ViewGroup && parentMatcher.matches(parent)
-                        && view.equals(((ViewGroup) parent).getChildAt(position));
+            public String getDescription() {
+                return "Change view text";
+            }
+
+            @Override
+            public void perform(UiController uiController, View view) {
+                ((SearchView) view).setQuery(text,false);
             }
         };
     }
+
 }

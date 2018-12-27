@@ -18,6 +18,20 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    flavorDimensions "version"
+    productFlavors {
+        prod {
+
+        }
+        mock {
+            applicationId "com.android.testing.gus.mock"
+        }
+    }
+    compileOptions {
+        sourceCompatibility = '1.8'
+        targetCompatibility = '1.8'
+    }
 }
 
 dependencies {
@@ -29,18 +43,45 @@ dependencies {
     testImplementation 'com.android.support.test:rules:0.5'
 
 
-    testImplementation 'junit:junit:4.12'
-    testImplementation 'org.mockito:mockito-core:2.7.22'
+    //Dependencies for Espresso
+    androidTestImplementation('com.android.support.test.espresso:espresso-core:3.0.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+    androidTestImplementation("com.android.support.test:runner:1.0.2") {
+        exclude module: 'support-annotations'
+        exclude module: 'support-v4'
+    }
+    androidTestImplementation("com.android.support.test:rules:1.0.2") {
+        exclude module: 'support-annotations'
+        exclude module: 'support-v4'
+    }
+    androidTestImplementation("com.android.support.test.espresso:espresso-intents:2.2.2") {
+        exclude module: 'recyclerview-v7'
+        exclude module: 'support-annotations'
+        exclude module: 'support-v4'
+    }
+    androidTestImplementation('com.android.support.test.espresso:espresso-contrib:2.2.1') {
+        exclude module: 'recyclerview-v7'
+        exclude module: 'support-annotations'
+        exclude module: 'support-v4'
 
-    androidTestImplementation 'org.mockito:mockito-android:2.7.22'
+    }
 
-    androidTestImplementation 'com.android.support.test:runner:1.0.2'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
-    androidTestImplementation 'com.android.support.test:rules:1.0.2'
 
-    //MockWebServer
+
+    //Dependencies for JUNit and unit tests.
+    testImplementation "junit:junit:4.12"
+    testImplementation "org.mockito:mockito-all:1.10.19"
+    testImplementation "org.hamcrest:hamcrest-all:1.3"
+    testImplementation("org.powermock:powermock-module-junit4:1.6.2")
+    testImplementation("org.powermock:powermock-api-mockito:1.6.2")
     testImplementation 'com.squareup.okhttp3:mockwebserver:3.7.0'
 
+
+
+    androidTestImplementation 'androidx.test.ext:junit:1.0.0'
+    androidTestImplementation 'androidx.test.ext:truth:1.0.0'
+    
     //
     androidTestImplementation "android.arch.core:core-testing:1.0.0"
 
