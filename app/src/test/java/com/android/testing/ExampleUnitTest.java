@@ -21,10 +21,12 @@ import java.util.List;
 
 import io.reactivex.Observable;
 import io.reactivex.Single;
+import io.reactivex.observers.TestObserver;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.powermock.api.mockito.PowerMockito.when;
 
@@ -65,11 +67,20 @@ public class ExampleUnitTest {
         Topics topics2 = new Topics(1,"topics2");
         topics.add(topics1);
         topics.add(topics2);
-        Single<List<Topics>> observable = Observable.fromIterable(topics).toList();
+        Observable<List<Topics>> observable = Observable.just(topics);
         when(service.getTopicsRx()).thenReturn(observable);
 
         Assert.assertEquals(service.getTopicsRx(),observable);
-        verify(service).getTopicsRx();
+
+        TestObserver<List<Topics>> observer = service.getTopicsRx().test();
+
+        observer.awaitTerminalEvent();
+        observer.assertNoErrors();
+
+        observer.assertValue(l->l.size() == 2);
+        observer.assertValue(l-> l.get(0).getId() == 1);
+
+        verify(service,times(2)).getTopicsRx();
     }
 
 

@@ -9,5 +9,5 @@ import retrofit2.http.GET
 interface Service {
 
     @GET("topics/")
-    fun getTopicsRx(): Single<List<Topics>>
+    fun getTopicsRx(): Observable<List<Topics>>
 }

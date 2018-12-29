@@ -15,7 +15,7 @@ class RemoteDataSource(retrofit: Retrofit) : Service {
         this.api = retrofit.create<Service>(Service::class.java!!)
     }
 
-    override fun getTopicsRx(): Single<List<Topics>> {
+    override fun getTopicsRx(): Observable<List<Topics>> {
         return api.getTopicsRx();
 
     }
