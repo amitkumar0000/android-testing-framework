@@ -9,6 +9,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.mockito.verification.VerificationMode;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -22,11 +23,14 @@ import okhttp3.MediaType;
 import okhttp3.ResponseBody;
 import retrofit2.HttpException;
 import retrofit2.Response;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.never;
+
+
 
 import static org.junit.Assert.*;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 public class UserRepositoryImplTest {
@@ -90,6 +94,47 @@ public class UserRepositoryImplTest {
 
         verify(githubUserRestService).getUser(USER_LOGIN_RIGGAROO);
         verify(githubUserRestService).getUser(USER_LOGIN_2_REBECCA);
+    }
+
+
+    @Test
+    public void searchUsers_GetUserIOExceptionThenSuccess_SearchUsersRetried() {
+        //Given
+        when(githubUserRestService.searchGithubUsers(anyString())).thenReturn(Observable.just(githubUserList()));
+        when(githubUserRestService.getUser(anyString()))
+                .thenReturn(getIOExceptionError(), Observable.just(user1FullDetails()),
+                        Observable.just(user2FullDetails()));
+
+        //When
+        TestObserver<User> subscriber = userRepository.searchUsers(USER_LOGIN_RIGGAROO).test();
+
+
+        //Then
+        subscriber.awaitTerminalEvent();
+        subscriber.assertNoErrors();
+
+        verify(githubUserRestService, times(2)).searchGithubUsers(USER_LOGIN_RIGGAROO);
+
+        verify(githubUserRestService, times(2)).getUser(USER_LOGIN_RIGGAROO);
+        verify(githubUserRestService).getUser(USER_LOGIN_2_REBECCA);
+    }
+
+    @Test
+    public void searchUsers_OtherHttpError_SearchTerminatedWithError() {
+        //Given
+        when(githubUserRestService.searchGithubUsers(anyString())).thenReturn(get403ForbiddenError());
+
+        //When
+        TestObserver<User> subscriber = userRepository.searchUsers(USER_LOGIN_RIGGAROO).test();
+
+
+        //Then
+        subscriber.awaitTerminalEvent();
+        subscriber.assertError(HttpException.class);
+
+        verify(githubUserRestService).searchGithubUsers(USER_LOGIN_RIGGAROO);
+        verify(githubUserRestService, never()).getUser(USER_LOGIN_RIGGAROO);
+        verify(githubUserRestService,  never()).getUser(USER_LOGIN_2_REBECCA);
     }
 
     private UsersList githubUserList() {

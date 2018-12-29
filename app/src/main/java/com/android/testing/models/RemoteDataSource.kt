@@ -2,6 +2,7 @@ package com.android.testing.models
 
 import com.android.testing.interfaces.Service
 import io.reactivex.Observable
+import io.reactivex.Single
 import retrofit2.Retrofit
 
 
@@ -14,7 +15,7 @@ class RemoteDataSource(retrofit: Retrofit) : Service {
         this.api = retrofit.create<Service>(Service::class.java!!)
     }
 
-    override fun getTopicsRx(): Observable<List<Topics>> {
+    override fun getTopicsRx(): Single<List<Topics>> {
         return api.getTopicsRx();
 
     }

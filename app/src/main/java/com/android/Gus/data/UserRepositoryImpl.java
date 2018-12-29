@@ -23,7 +23,7 @@ public class UserRepositoryImpl implements UserRepository {
                         .concatMap(user -> githubUserRestService.getUser(user.getLogin()))))
                 .retryWhen(observable -> observable.flatMap(o -> {
                     if (o instanceof IOException) {
-                        return Observable.just(null);
+                        return Observable.just(o);
                     }
                     return Observable.error(o);
                 }));
